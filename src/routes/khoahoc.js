@@ -31,7 +31,10 @@ router.delete('/:id/force', khoahocController.forceDestroy);
 
 router.get('/:slug/:id/edit-lesson', lessonController.edit);
 router.get('/:slug/create-lesson', lessonController.create);
+router.get('/:slug/:id/view', lessonController.viewLesson);
 router.put('/:slug/:id/', lessonController.update);
+
+
 
 // router.post('/cc/store', lessonController.store);
 router.post('/:slug/store', lessonController.store);

@@ -49,7 +49,7 @@ class KhoahocController {
 
     // /courses/:slug
     view(req, res, next) {
-        Lesson.find({})
+        Lesson.find({courseID:req.params.slug})
             .then(lessons => {
                 res.render('courses/view', {
                     lessons: mulipleMongooseToObject(lessons), slug_c:req.params.slug

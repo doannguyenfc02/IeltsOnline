@@ -17,16 +17,10 @@ const Course = new Schema({
     level: { type: String, maxLength: 255 },
     
 
-    // createdAt: { type: Date, default: Date.now },
-    // updatedAt: { type: Date, default: Date.now },
 },{
     timestamps:true, 
 });
 
 
-// Course.plugin(mongooseDelete, {
-//     deletedAt: true,
-//     overrideMethods: 'all',
-// });
 
 module.exports = mongoose.model('Course', Course);

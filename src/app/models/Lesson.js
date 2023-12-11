@@ -13,7 +13,8 @@ const Lesson = new Schema({
     description: { type: String, maxLength: 600 },
     image: { type: String, maxLength: 255 },
     slug: { type: String, slug: 'name', unique: true},
-    videoID: { type: String, maxLength: 255 , require: true},
+    videoID: { type: String, maxLength: 255 , require: true}, 
+    courseID: { type: String, maxLength: 255 , require: true}, 
 },{
     timestamps:true, 
 });

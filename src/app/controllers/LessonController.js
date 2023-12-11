@@ -12,20 +12,41 @@ class LessonController {
     async index(req, res, next) {
         res.render('khoahoc')
     }
-        //[POST] /courses/store
-        store(req, res, next) {
+    viewLesson(req, res, next){
+        Lesson.findOne({_id: req.params.id })
+        .then(lesson => {
+            res.render('lesson/lesson', { lesson: mongooseToObject(lesson) })  //TRUYỀN DỮ LIỆU QUA course
+        })
+        .catch(next);
+    }
+
+    //[POST] /courses/store
+    store(req, res, next) {
             // res.json(req.body);
             // res.render('courses/store');
             const formData = req.body;
-            formData.image = `https://img.youtube.com/vi/${req.body.videoID}/sddefault.jpg`;
+            formData.image = `https://img.youtube.com/vi/${req.body.videoID}/sddefault.jpg`;            
             const lesson = new Lesson(formData);
             lesson.save()
-                .then(() => res.redirect('/courses'))
+                .then(() => res.redirect(`/courses/${req.params.slug}`))
                 .catch(error => {
     
                 });
             // res.send("Course Save");
         }
+
+        // store(req, res, next) {
+        //     const formData = req.body;
+        //     formData.image = `https://img.youtube.com/vi/${req.body.videoID}/sddefault.jpg`;
+        //     formData.courseID=`${req.params.slug}`;
+        //     const lesson = new Lesson(formData);
+        //     lesson.save()
+        //         .then(() => res.redirect(`/courses/${req.params.slug}`))
+        //         .catch(error => {
+    
+        //         });
+    
+        // }
 
 
     //[GET] /courses/create
@@ -43,7 +64,6 @@ class LessonController {
             .then(lesson => {
                 res.render('lesson/editLesson', {
                     lesson: mongooseToObject(lesson),  slug_c: req.params.slug
-                    
                 });
             })
             .catch(next);
@@ -58,19 +78,7 @@ class LessonController {
 
 
 
-    store(req, res, next) {
-        // res.send(`${req.params.slug}`);
-        res.render('lesson/store');
-        const formData = req.body;
-        formData.image = `https://img.youtube.com/vi/${req.body.videoID}/sddefault.jpg`;
-        const lesson = new Lesson(formData);
-        lesson.save()
-            .then(() => res.redirect(`/courses/${req.params.slug}`))
-            .catch(error => {
 
-            });
-
-    }
     // [DELETE] /courses/lesson/:id
     destroy(req, res, next) {
         Lesson.deleteOne({ _id: req.params.id })

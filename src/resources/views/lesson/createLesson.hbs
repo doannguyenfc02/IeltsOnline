@@ -1,11 +1,14 @@
 <div class="mt-4">
     <h3>
-        Tạo Bài học
+        Tạo Bài học{{slug}}
     </h3>
 
     <form method="POST" action="/courses/{{slug}}/store">
         <div class="form-group">
-            <label for="name">Tên Khóa Học</label>
+            <input type="hidden" class="form-control" id="courseID" name="courseID" value="{{slug}}">
+        </div>
+        <div class="form-group">
+            <label for="name">Tên bài giảng</label>
             <input type="text" class="form-control" id="name" name="name">
 
         </div>
