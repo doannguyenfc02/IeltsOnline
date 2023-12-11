@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài Trắc Nghiệm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 10px;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="question" id="question1">
+        <p>Câu hỏi 1: HTML là viết tắt của gì?</p>
+        <input type="radio" name="q1" value="a"> a) HyperText Markup Language<br>
+        <input type="radio" name="q1" value="b"> b) HyperText Makeup Language<br>
+        <input type="radio" name="q1" value="c"> c) HyperTransfer Markup Language<br>
+    </div>
+
+    <div class="question" id="question2">
+        <p>Câu hỏi 2: CSS là viết tắt của gì?</p>
+        <input type="radio" name="q2" value="a"> a) Computer Style Sheets<br>
+        <input type="radio" name="q2" value="b"> b) Creative Style Sheets<br>
+        <input type="radio" name="q2" value="c"> c) Cascading Style Sheets<br>
+    </div>
+
+    <div class="question" id="question3">
+        <p>Câu hỏi 3: JavaScript được sử dụng để làm gì?</p>
+        <input type="radio" name="q3" value="a"> a) Tạo nội dung web động<br>
+        <input type="radio" name="q3" value="b"> b) Thiết kế giao diện người dùng<br>
+        <input type="radio" name="q3" value="c"> c) Quản lý cơ sở dữ liệu<br>
+    </div>
+
+    <button onclick="calculateScore()">Kiểm tra kết quả</button>
+
+    <div id="result"></div>
+
+    <script>
+        function calculateScore() {
+            var score = 0;
+
+            // Câu hỏi 1: Đáp án đúng là a
+            if (document.querySelector('input[name="q1"]:checked').value === 'a') {
+                score++;
+            }
+
+            // Câu hỏi 2: Đáp án đúng là c
+            if (document.querySelector('input[name="q2"]:checked').value === 'c') {
+                score++;
+            }
+
+            // Câu hỏi 3: Đáp án đúng là a
+            if (document.querySelector('input[name="q3"]:checked').value === 'a') {
+                score++;
+            }
+
+            // Hiển thị kết quả
+            var resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Điểm của bạn: ' + score + '/3';
+        }
+    </script>
+
+</body>
+</html>
