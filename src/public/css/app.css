@@ -1,0 +1,56 @@
+@charset "UTF-8";
+.card-course-item {
+  margin-top: 16px; }
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 4px; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif; }
+
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  line-height: 50px; }
+
+.header {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #333;
+  color: white;
+  text-align: center;
+  line-height: 50px; }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: #333;
+  color: white;
+  text-align: left;
+  line-height: 15px; }
+
+.mg1 {
+  margin-top: 90px;
+  /* Đảm bảo nội dung không bị che phủ bởi header */
+  margin-bottom: 0;
+  /* Đảm bảo nội dung không bị che phủ bởi footer */ }
+
+.mg2 {
+  margin-top: 0;
+  /* Đảm bảo nội dung không bị che phủ bởi header */
+  margin-bottom: 140px;
+  /* Đảm bảo nội dung không bị che phủ bởi footer */ }
