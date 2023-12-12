@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .answer-option {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <form id="questions-form">
+        <div id="questions-container"></div>
+
+        <button type="button" onclick="addQuestion()">Thêm câu hỏi</button>
+        <button type="button" onclick="saveExam()">Lưu</button>
+    </form>
+
+    <script>
+        var questionCount = 0;
+
+        function addQuestion() {
+            questionCount++;
+            var container = document.getElementById('questions-container');
+
+            var newQuestionDiv = document.createElement('div');
+            newQuestionDiv.className = 'question';
+            newQuestionDiv.id = 'question' + questionCount;
+
+            newQuestionDiv.innerHTML = '<p>Câu hỏi ' + questionCount + ': </p>' +
+                '<textarea name="questionsData[' + (questionCount - 1) + '].text" placeholder="Nhập câu hỏi"></textarea><br>' +
+                '<div class="answer-option"><input type="radio" name="questionsData[' + (questionCount - 1) + '].correctOption" value="a"> a) <input type="text" name="questionsData[' + (questionCount - 1) + '].options[0]" required><br></div>' +
+                '<div class="answer-option"><input type="radio" name="questionsData[' + (questionCount - 1) + '].correctOption" value="b"> b) <input type="text" name="questionsData[' + (questionCount - 1) + '].options[1]" required><br></div>' +
+                '<div class="answer-option"><input type="radio" name="questionsData[' + (questionCount - 1) + '].correctOption" value="c"> c) <input type="text" name="questionsData[' + (questionCount - 1) + '].options[2]" required><br></div>' +
+                '<div class="answer-option"><input type="radio" name="questionsData[' + (questionCount - 1) + '].correctOption" value="d"> d) <input type="text" name="questionsData[' + (questionCount - 1) + '].options[3]" required><br></div>' +
+                '<button type="button" onclick="removeQuestion(' + questionCount + ')">Xóa</button>';
+
+            container.appendChild(newQuestionDiv);
+        }
+
+        function removeQuestion(questionNumber) {
+            var questionToRemove = document.getElementById('question' + questionNumber);
+            questionToRemove.parentNode.removeChild(questionToRemove);
+
+            // Cập nhật lại số thứ tự của các câu hỏi còn lại
+            for (var i = questionNumber + 1; i <= questionCount; i++) {
+                var currentQuestion = document.getElementById('question' + i);
+                currentQuestion.id = 'question' + (i - 1);
+                currentQuestion.querySelector('p').innerText = 'Câu hỏi ' + (i - 1) + ':';
+            }
+
+            // Giảm biến đếm câu hỏi
+            questionCount--;
+        }
+
+        function saveExam() {
+            var formData = new FormData(document.getElementById('questions-form'));
+
+            // Gửi formData đến server bằng cách sử dụng XMLHttpRequest hoặc Fetch API
+            // Ví dụ sử dụng Fetch API:
+            fetch('/exams/store', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+
+</body>
+</html>
