@@ -4,6 +4,7 @@ const Question = require('../models/Question');
 const Exam = require('../models/Exam');
 
 
+const { mongooseToObject } = require('../../until/mongoose')
 
 const { mulipleMongooseToObject } = require('../../until/mongoose')
 
@@ -31,6 +32,21 @@ class ExamController {
             });
         // res.send("Course Save");
     }
+    edit(req, res, next) {
+        // res.send("LE Save");
+        Question.findById(req.params.id)
+            .then(question => {
+                res.render('Exam/edit', {
+                    question: mongooseToObject(question),  slug_c: req.params.slug
+                });
+            })
+            .catch(next);
+    }
+    update(req, res, next) {
+        Question.updateOne({ _id: req.params.id }, req.body)
+            .then(() => res.redirect("/exam"))
+            .catch(next);
+    }
     exam(req, res, next) {
         Question.find()
             .then(questions => {
@@ -38,6 +54,12 @@ class ExamController {
                     questions: mulipleMongooseToObject(questions)
                 });
             })
+            .catch(next);
+    }
+
+    destroy(req, res, next) {
+        Question.deleteOne({ _id: req.params.id })
+            .then(() => res.redirect('back'))
             .catch(next);
     }
  

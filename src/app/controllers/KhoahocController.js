@@ -71,7 +71,6 @@ class KhoahocController {
         // res.json(req.body);
         // res.render('courses/store');
         const formData = req.body;
-        formData.image = `https://img.youtube.com/vi/${req.body.videoID}/sddefault.jpg`;
         const course = new Course(formData);
         course.save()
             .then(() => res.redirect('/courses'))

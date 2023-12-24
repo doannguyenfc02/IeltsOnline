@@ -1,7 +1,7 @@
 <div class="mt-4">
     <div>
       <h3>Khóa học của tôi</h3>
-      <a href="/me/trash/courses">Thùng rác ({{deletedCount}})</a>
+      <a href="/courses/create" class="btn btn-primary">Thêm khóa học</a>
     </div>
 
     <table class="table mt-4">
@@ -18,7 +18,10 @@
             <tr>
                 <th scope="row">{{sum @index 1}}</th>
                 {{!-- <th scope="row">1</th> --}}
-                <td>{{this.name}}</td>
+                
+                <td>
+                  <a href="/courses/{{this.slug}}">{{this.name}}</a>
+                  </td>
                 <td>{{this.level}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>

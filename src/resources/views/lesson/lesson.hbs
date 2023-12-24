@@ -1,11 +1,18 @@
-<h1>Lesson</h1>
 
 <div class="mt-4">
     <div class="row">
         <div class="col-lg-3">
-            <button>Làm bài tập</button>
+            <label>Menu</label>
             <ul>
-                <li>{{lesson.description}}</li>
+                <li>
+                    <a href="/exam">Làm bài tập</a>
+                </li>
+                <li>
+                    <a href="">Bài học tiếp theo</a>
+                </li>
+                <li>
+                    <a href="">Quay lại khóa học</a>
+                </li>
             </ul>
         </div>
 
@@ -15,7 +22,7 @@
             <iframe width="560" height="315" src="https://www.youtube.com/embed/{{lesson.videoID}}" frameborder="0"
                 allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
             </iframe>
-            <p>{{lesson.description}}</p>
+            <p>Mô tả: {{lesson.description}}</p>
         </div>
     </div>
 </div>

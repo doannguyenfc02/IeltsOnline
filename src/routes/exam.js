@@ -12,7 +12,12 @@ const lessonController=require('../app/controllers/LessonController');
 
 router.get('/create',examController.create);
 router.post('/store', examController.store);  //lưu câu hỏi
-router.get('/exam', examController.exam);  //tạo bài kiểm tra
+router.get('/:id/edit', examController.edit);
+router.put('/:id', examController.update);
+
+
+router.delete('/:id', examController.destroy);
+
 
 
 

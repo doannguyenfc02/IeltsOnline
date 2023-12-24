@@ -1,18 +1,16 @@
 {{!-- view.hbs --}}
 <div class="mt-4">
     <div>
-        <a href="{{slug_c}}/create-lesson" class="btn btn-primary">Thêm bài học</a>
+        <a href="{{slug_c}}/create-lesson" class="btn btn-primary">Thêm bài giảng</a>
     </div>
-    <div>
-      <h3>Khóa học của tôi</h3>
-      <a href="/me/trash/courses">Thùng rác ({{deletedCount}})</a>
-    </div>
+
 
     <table class="table mt-4">
         <thead>
             <tr>
                 <th scope="col">TT</th>
                 <th scope="col">Tên Bài học</th>
+                <th>Test</th>
                 <th scope="col">Mô tả</th>
                 <th scope="col" colspan="2">Thời gian tạo</th>
             </tr>
@@ -24,8 +22,9 @@
                 <th scope="row">{{sum @index 1}}</th>
                 {{!-- <th scope="row">1</th> --}}
                 <td>
-                  <a href="">{{this.name}}</a>
+                  <a href="/courses/{{../slug_c}}/{{this._id}}/view">{{this.name}}</a>
                 </td>
+                <td>{{this.courseID}}</td>
                 <td>{{this.description}}</td>
                 <td>{{this.createdAt}}</td>
                 <td>
