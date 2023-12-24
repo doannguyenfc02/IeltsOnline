@@ -6,6 +6,7 @@ const { engine } = require('express-handlebars');
 // const handlebars = require('express-handlebars'); 
 const route = require('./routes');
 const db = require('./config/db');
+const handlebarsHelpers = require('handlebars-helpers')();
 
 //Connect DB
 db.connect();
@@ -37,6 +38,8 @@ app.engine('hbs', engine({
   extname: '.hbs',
   helpers:{
     sum :(a,b)=>a+b,
+    ...handlebarsHelpers
+
   }
 }));
 app.set('view engine', 'hbs');

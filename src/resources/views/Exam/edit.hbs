@@ -9,21 +9,21 @@
             <textarea name="text" value="{{question.text}}" placeholder="Nhập câu hỏi">{{question.text}}</textarea><br>
         </div>
         <div class="form-group">
-            <input type="radio" name="correctOption" value="a"> a)
+            <input type="radio" name="correctOption" value="a" {{#if (eq question.correctOption 'a')}}checked{{/if}}> a)
              <input type="text" name="options[0]" value= "{{question.options.[0]}}" required><br>
 
         </div>
         <div class="form-group">
-            <input type="radio" name="correctOption" value="b"> b) 
+            <input type="radio" name="correctOption" value="b" {{#if (eq question.correctOption 'b')}}checked{{/if}}> b) 
             <input type="text" name="options[1]"  value= "{{question.options.[1]}}" required><br>
 
         </div>
         <div class="form-group">
-                <input type="radio" name="correctOption" value="c"> c) 
+                <input type="radio" name="correctOption" value="c" {{#if (eq question.correctOption 'c')}}checked{{/if}}> c) 
                 <input type="text" name="options[2]" value= "{{question.options.[2]}}" required><br>
         </div>
         <div class="form-group">
-                <input type="radio" name="correctOption" value="d"> d) 
+                <input type="radio" name="correctOption" value="d" {{#if (eq question.correctOption 'd')}}checked{{/if}}> d) 
                 <input type="text" name="options[3]" value= "{{question.options.[3]}}" required><br>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
