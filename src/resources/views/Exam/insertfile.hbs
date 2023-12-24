@@ -1,0 +1,66 @@
+<div class="mt-4">
+    <h3>
+        Tạo câu hỏi <br>
+        <button>Thêm câu hỏi từ file exel</button>
+    </h3>
+
+    <form method="POST" action="/exam/store">
+
+        <div class="form-group">
+            <textarea name="text_1" placeholder="Nhập câu hỏi"></textarea><br>
+        </div>
+        <div class="form-group">
+            <input type="radio" name="correctOption_1" value="a"> a) <input type="text" name="options0_1" required><br>
+        </div>
+        <div class="form-group">
+            <input type="radio" name="correctOption_1" value="b"> b) <input type="text" name="options1_1" required><br>
+        </div>
+        <div class="form-group">
+            <input type="radio" name="correctOption_1" value="c"> c) <input type="text" name="options2_1" required><br>
+        </div>
+        <div class="form-group">
+            <input type="radio" name="correctOption_1" value="d"> d) <input type="text" name="options3_1" required><br>
+        </div>
+        
+        <div id="additionalQuestions"></div>
+
+        <button type="button" class="btn btn-primary" onclick="addQuestion()">Thêm câu hỏi</button>
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </form>
+</div>
+
+<script>
+    let questionCount = 1;
+
+    function addQuestion() {
+        questionCount++;
+
+        const questionDiv = document.createElement("div");
+        questionDiv.setAttribute("id", `question${questionCount}`);
+        questionDiv.innerHTML = `
+            <div class="form-group">
+                <textarea name="text_${questionCount}" placeholder="Nhập câu hỏi"></textarea><br>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="correctOption_${questionCount}" value="a"> a) <input type="text" name="options0_${questionCount}" required><br>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="correctOption_${questionCount}" value="b"> b) <input type="text" name="options1_${questionCount}" required><br>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="correctOption_${questionCount}" value="c"> c) <input type="text" name="options2_${questionCount}" required><br>
+            </div>
+            <div class="form-group">
+                <input type="radio" name="correctOption_${questionCount}" value="d"> d) <input type="text" name="options3_${questionCount}" required><br>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeQuestion(${questionCount})">Xóa</button>
+        `;
+
+        document.getElementById("additionalQuestions").appendChild(questionDiv);
+    }
+
+    function removeQuestion(questionNumber) {
+        const questionDiv = document.getElementById(`question${questionNumber}`);
+        questionDiv.parentNode.removeChild(questionDiv);   
+    }
+</script>

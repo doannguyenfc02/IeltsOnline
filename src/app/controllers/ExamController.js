@@ -22,16 +22,75 @@ class ExamController {
     create(req, res, next) {
         res.render('Exam/create');
     }
+
     store(req, res, next) {
         const formData = req.body;
-        const q = new Question(formData);
-        q.save()
-            .then(() => res.redirect('/exam'))
-            .catch(error => {
+    
+        // Lặp qua formData để trích xuất và lưu mỗi câu hỏi
+        for (let key in formData) {
+            if (formData.hasOwnProperty(key) && key.startsWith('text_')) {
+                const questionNumber = key.split('_')[1];
+    
+                const questionData = {
+                    text: formData[key],
+                    options: [
+                        formData[`options0_${questionNumber}`],
+                        formData[`options1_${questionNumber}`],
+                        formData[`options2_${questionNumber}`],
+                        formData[`options3_${questionNumber}`]
+                    ],
+                    correctOption: formData[`correctOption_${questionNumber}`]
 
-            });
-        // res.send("Course Save");
+                };
+            
+                const q = new Question(questionData);
+                q.save()
+                    .then(() => console.log(`Câu hỏi ${questionNumber} đã được lưu thành công`))
+                    .catch(error => console.error(`Lỗi khi lưu câu hỏi ${questionNumber}: ${error}`));
+            }
+        }
+    
+        // Chuyển hướng hoặc phản hồi theo cần thiết
+        res.redirect('/exam');
     }
+    insertfile(req, res, next) {
+        res.render('Exam/insertfile');
+    }
+
+    insertfilestore(req, res, next) {
+        const formData = req.body;
+    
+        // Lặp qua formData để trích xuất và lưu mỗi câu hỏi
+        for (let key in formData) {
+            if (formData.hasOwnProperty(key) && key.startsWith('text_')) {
+                const questionNumber = key.split('_')[1];
+    
+                const questionData = {
+                    text: formData[key],
+                    options: [
+                        formData[`options0_${questionNumber}`],
+                        formData[`options1_${questionNumber}`],
+                        formData[`options2_${questionNumber}`],
+                        formData[`options3_${questionNumber}`]
+                    ],
+                    correctOption: formData[`correctOption_${questionNumber}`]
+
+                };
+            
+                const q = new Question(questionData);
+                q.save()
+                    .then(() => console.log(`Câu hỏi ${questionNumber} đã được lưu thành công`))
+                    .catch(error => console.error(`Lỗi khi lưu câu hỏi ${questionNumber}: ${error}`));
+            }
+        }
+    
+        // Chuyển hướng hoặc phản hồi theo cần thiết
+        res.redirect('/exam');
+    }
+    
+    
+    
+    
     edit(req, res, next) {
         // res.send("LE Save");
         Question.findById(req.params.id)

@@ -12,6 +12,11 @@ const lessonController=require('../app/controllers/LessonController');
 
 router.get('/create',examController.create);
 router.post('/store', examController.store);  //lưu câu hỏi
+
+router.get('/insertfile',examController.insertfile);
+router.post('/filestore', examController.insertfilestore);  //lưu câu hỏi
+
+
 router.get('/:id/edit', examController.edit);
 router.put('/:id', examController.update);
 
