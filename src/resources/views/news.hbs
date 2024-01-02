@@ -1,1 +1,49 @@
-<h1>New Page</h1>
+<div class="mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+        </div>
+        <div class="col-lg-9">
+            <iframe id="youtube-video" width="560" height="315" src="https://www.youtube.com/embed/GqF_3oNg0Aw?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Lấy tham chiếu đến thẻ iframe của video
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-video', {
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        // Sự kiện xảy ra khi video sẵn sàng
+        event.target.playVideo(); // Bắt đầu chơi video ngay khi sẵn sàng
+    }
+
+    function onPlayerStateChange(event) {
+        // Sự kiện xảy ra khi trạng thái của video thay đổi
+        if (event.data == YT.PlayerState.PLAYING) {
+            // Đặt timeout để tạm dừng video ở giây thứ 5, 10, 15
+            setTimeout(function() {
+                player.pauseVideo();
+            }, 5000);
+
+            setTimeout(function() {
+                player.pauseVideo();
+            }, 10000);
+
+            setTimeout(function() {
+                player.pauseVideo();
+            }, 15000);
+        }
+    }
+</script>
+
+<!-- Nhúng API JavaScript của YouTube -->
+<script src="https://www.youtube.com/iframe_api"></script>
+

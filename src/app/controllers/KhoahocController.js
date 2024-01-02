@@ -1,4 +1,5 @@
-// KhoahocControler.js
+//controler/KhoahocController.js
+
 
 const Course = require('../models/Course');
 const Lesson=  require('../models/Lesson');

@@ -1,3 +1,4 @@
+//app/models/Exam.js
 const mongoose = require('mongoose');
 const slug = require('mongoose-slug-updater');
 

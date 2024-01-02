@@ -1,28 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Video Quiz</title>
+    <style>
+        .question {
+            display: none;
+        }
+
+        #result {
+            display: none;
+        }
+    </style>
+</head>
+<body>
 
 <div class="mt-4">
     <div class="row">
-        <div class="col-lg-3">
-            <label>Menu</label>
-            <ul>
-                <li>
-                    <a href="/exam">Làm bài tập</a>
-                </li>
-                <li>
-                    <a href="">Bài học tiếp theo</a>
-                </li>
-                <li>
-                    <a href="">Quay lại khóa học</a>
-                </li>
-            </ul>
-        </div>
-
+        <div class="col-lg-3"></div>
         <div class="col-lg-9">
-            <h2>{{lesson.name}}</h2>
+            <div id="question1" class="question">
+                <p>Câu hỏi 1: Ai là người đầu tiên đặt chân lên mặt trăng?</p>
+                <input type="radio" name="answer1" value="a" id="answer1_a"> a) Neil Armstrong<br>
+                <input type="radio" name="answer1" value="b" id="answer1_b"> b) Buzz Aldrin<br>
+                <input type="radio" name="answer1" value="c" id="answer1_c"> c) Michael Collins<br>
+                <button onclick="checkAnswer(1)">Kiểm Tra</button>
+            </div>
 
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/{{lesson.videoID}}" frameborder="0"
-                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
-            </iframe>
-            <p>Mô tả: {{lesson.description}}</p>
+            <div id="question2" class="question">
+                <p>Câu hỏi 2: Trong hệ thống mặt trời, hành tinh nào gần nhất với Mặt Trời?</p>
+                <input type="radio" name="answer2" value="a" id="answer2_a"> a) Mặt Trời<br>
+                <input type="radio" name="answer2" value="b" id="answer2_b"> b) Sao Kim<br>
+                <input type="radio" name="answer2" value="c" id="answer2_c"> c) Sao Hỏa<br>
+                <button onclick="checkAnswer(2)">Kiểm Tra</button>
+            </div>
+
+            <div id="question3" class="question">
+                <p>Câu hỏi 3: Trái đất có bao nhiêu đại dương?</p>
+                <input type="radio" name="answer3" value="a" id="answer3_a"> a) 3<br>
+                <input type="radio" name="answer3" value="b" id="answer3_b"> b) 4<br>
+                <input type="radio" name="answer3" value="c" id="answer3_c"> c) 5<br>
+                <button onclick="checkAnswer(3)">Kiểm Tra</button>
+            </div>
+
+            <div id="result">
+                <p id="result-message"></p>
+            </div>
+
+            <iframe id="youtube-video" width="560" height="315" src="https://www.youtube.com/embed/GqF_3oNg0Aw?enablejsapi=1" frameborder="0" allowfullscreen></iframe>
         </div>
     </div>
 </div>
+
+<script>
+    var player;
+    var currentQuestionIndex = 0;
+    var questionTimes = [5, 10, 15];
+    var videoPlaying = false;
+    var questionTimer;
+    var canAskQuestion = true;
+    var answeredQuestions = [];
+    var isAnswered = false;
+
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtube-video', {
+            events: {
+                'onReady': onPlayerReady,
+                'onStateChange': onPlayerStateChange
+            }
+        });
+    }
+
+    function onPlayerReady(event) {
+        event.target.playVideo();
+    }
+
+    function onPlayerStateChange(event) {
+        if (event.data == YT.PlayerState.PLAYING) {
+            videoPlaying = true;
+            checkQuestionTime();
+        }
+    }
+
+    function checkQuestionTime() {
+        clearInterval(questionTimer); // Xóa bộ hẹn giờ cũ
+        questionTimer = setInterval(function () {
+            var currentTime = player.getCurrentTime();
+            if (videoPlaying && canAskQuestion) {
+                var currentQuestionTime = questionTimes[currentQuestionIndex];
+                if (currentTime >= currentQuestionTime && currentTime < currentQuestionTime + 1) {
+                    // Dừng video khi hiển thị câu hỏi
+                    player.pauseVideo();
+                    showQuestion(currentQuestionIndex + 1);
+                    canAskQuestion = false;
+                }
+            }
+        }, 1000);
+    }
+
+    function showQuestion(questionNumber) {
+        hideAllQuestions();
+        var questionId = "question" + questionNumber;
+        document.getElementById(questionId).style.display = "block";
+        // Xóa lựa chọn trước đó
+        var radioButtons = document.querySelectorAll('input[name="answer' + questionNumber + '"]');
+        radioButtons.forEach(function (radioButton) {
+            radioButton.checked = false;
+        });
+        isAnswered = false; // Đặt trạng thái câu hỏi chưa được trả lời
+    }
+
+    function hideAllQuestions() {
+        for (var i = 1; i <= 3; i++) { // Đặt số 3 là tổng số câu hỏi
+            var questionId = "question" + i;
+            document.getElementById(questionId).style.display = "none";
+        }
+    }
+
+    function checkAnswer(questionNumber) {
+        var answer = document.querySelector('input[name="answer' + questionNumber + '"]:checked');
+        if (answer) {
+            var userAnswer = answer.value;
+            // Xử lý kiểm tra câu trả lời ở đây
+            if (userAnswer === "a") {
+                // Nếu câu trả lời đúng, hiển thị thông báo và ẩn câu hỏi
+                document.getElementById('result-message').innerText = "Bạn đã trả lời đúng!";
+                document.getElementById('result').style.display = "block";
+                isAnswered = true; // Đặt trạng thái câu hỏi đã được trả lời
+                setTimeout(function () {
+                    document.getElementById('result').style.display = "none";
+                    hideAllQuestions();
+                    answeredQuestions.push(currentQuestionIndex);
+                    canAskQuestion = true; // Cho phép hiển thị câu hỏi ở lần tiếp theo
+                    player.playVideo();
+                    currentQuestionIndex++;
+                    checkQuestionTime(); // Tạo lại bộ hẹn giờ mới
+                }, 2000); // Ẩn thông báo sau 2 giây và tiếp tục video
+            } else {
+                // Nếu câu trả lời sai, hiển thị thông báo và quay lại đầu video
+                document.getElementById('result-message').innerText = "Bạn đã trả lời sai!";
+                document.getElementById('result').style.display = "block";
+                setTimeout(function () {
+                    document.getElementById('result').style.display = "none";
+                    hideAllQuestions();
+                    canAskQuestion = true; // Cho phép hiển thị câu hỏi ở lần tiếp theo
+                    player.seekTo(0);
+                    currentQuestionIndex = 0; // Quay lại câu hỏi đầu tiên
+                    checkQuestionTime(); // Tạo lại bộ hẹn giờ mới
+                }, 2000); // Ẩn thông báo sau 2 giây và quay lại đầu video
+            }
+        } else {
+            alert("Vui lòng chọn một câu trả lời.");
+        }
+    }
+</script>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+</body>
+</html>

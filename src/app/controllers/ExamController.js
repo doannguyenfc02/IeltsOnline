@@ -1,8 +1,9 @@
+//Examcontroller.js
 const e = require('express');
-;
+
+
 const Question = require('../models/Question');
 const Exam = require('../models/Exam');
-
 
 const { mongooseToObject } = require('../../until/mongoose')
 
@@ -121,6 +122,47 @@ class ExamController {
             .then(() => res.redirect('back'))
             .catch(next);
     }
+
+
+    async uploadFile(req, res, next) {
+        try {
+            if (!req.file) {
+                return res.status(400).send('No file uploaded.');
+            }
+
+            // Đọc dữ liệu từ file Excel
+            const workbook = xlsx.read(req.file.buffer, { type: 'buffer' });
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const excelData = xlsx.utils.sheet_to_json(sheet, { header: 1 });
+
+            // Loại bỏ hàng tiêu đề
+            excelData.shift();
+
+            // Tạo các trường input cho câu hỏi dựa trên dữ liệu từ file Excel
+            const questionDivs = excelData.map((rowData, index) => {
+                const questionNumber = index + 2;
+
+                return `
+                    <div id="question${questionNumber}" class="form-group">
+                        <textarea name="text_${questionNumber}" placeholder="Nhập câu hỏi">${rowData[0]}</textarea><br>
+                        <input type="radio" name="correctOption_${questionNumber}" value="a"> a) <input type="text" name="options0_${questionNumber}" value="${rowData[1]}" required><br>
+                        <input type="radio" name="correctOption_${questionNumber}" value="b"> b) <input type="text" name="options1_${questionNumber}" value="${rowData[2]}" required><br>
+                        <input type="radio" name="correctOption_${questionNumber}" value="c"> c) <input type="text" name="options2_${questionNumber}" value="${rowData[3]}" required><br>
+                        <input type="radio" name="correctOption_${questionNumber}" value="d"> d) <input type="text" name="options3_${questionNumber}" value="${rowData[4]}" required><br>
+                        <button type="button" class="btn btn-danger" onclick="removeQuestion(${questionNumber})">Xóa</button>
+                    </div>
+                `;
+            });
+
+            // Gửi mã HTML về client để hiển thị trên form
+            res.send(questionDivs.join(''));
+        } catch (error) {
+            console.error('Error processing file:', error);
+            res.status(500).send('Error processing file.');
+        }
+    }
+
+
  
 
 }

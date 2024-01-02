@@ -1,66 +1,71 @@
-<div class="mt-4">
-    <h3>
-        Tạo câu hỏi <br>
-        <button>Thêm câu hỏi từ file exel</button>
-    </h3>
+<!DOCTYPE html>
+<html lang="en">
 
-    <form method="POST" action="/exam/store">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel to HTML Form</title>
+    <!-- Thêm thư viện SheetJS -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
 
-        <div class="form-group">
-            <textarea name="text_1" placeholder="Nhập câu hỏi"></textarea><br>
-        </div>
-        <div class="form-group">
-            <input type="radio" name="correctOption_1" value="a"> a) <input type="text" name="options0_1" required><br>
-        </div>
-        <div class="form-group">
-            <input type="radio" name="correctOption_1" value="b"> b) <input type="text" name="options1_1" required><br>
-        </div>
-        <div class="form-group">
-            <input type="radio" name="correctOption_1" value="c"> c) <input type="text" name="options2_1" required><br>
-        </div>
-        <div class="form-group">
-            <input type="radio" name="correctOption_1" value="d"> d) <input type="text" name="options3_1" required><br>
-        </div>
-        
-        <div id="additionalQuestions"></div>
-
-        <button type="button" class="btn btn-primary" onclick="addQuestion()">Thêm câu hỏi</button>
-        <button type="submit" class="btn btn-primary">Lưu</button>
+<body>
+    <form method="POST" action="/exam/store" id="examForm">
+        <div id="output"></div>
+        <button type="submit" class="btn btn-primary">Lưu Tất Cả</button>
     </form>
-</div>
 
-<script>
-    let questionCount = 1;
+    <script>
+        function handleFile(event) {
+            const file = event.target.files[0];
 
-    function addQuestion() {
-        questionCount++;
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
 
-        const questionDiv = document.createElement("div");
-        questionDiv.setAttribute("id", `question${questionCount}`);
-        questionDiv.innerHTML = `
-            <div class="form-group">
-                <textarea name="text_${questionCount}" placeholder="Nhập câu hỏi"></textarea><br>
-            </div>
-            <div class="form-group">
-                <input type="radio" name="correctOption_${questionCount}" value="a"> a) <input type="text" name="options0_${questionCount}" required><br>
-            </div>
-            <div class="form-group">
-                <input type="radio" name="correctOption_${questionCount}" value="b"> b) <input type="text" name="options1_${questionCount}" required><br>
-            </div>
-            <div class="form-group">
-                <input type="radio" name="correctOption_${questionCount}" value="c"> c) <input type="text" name="options2_${questionCount}" required><br>
-            </div>
-            <div class="form-group">
-                <input type="radio" name="correctOption_${questionCount}" value="d"> d) <input type="text" name="options3_${questionCount}" required><br>
-            </div>
-            <button type="button" class="btn btn-danger" onclick="removeQuestion(${questionCount})">Xóa</button>
-        `;
+                    // Lấy dữ liệu từ sheet đầu tiên (giả sử)
+                    const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
 
-        document.getElementById("additionalQuestions").appendChild(questionDiv);
-    }
+                    // Tạo HTML từ dữ liệu
+                    const htmlOutput = sheetData.map((row, index) => {
+                        const questionNumber = index + 1;
+                        const questionContent = row['Nội dung'];
 
-    function removeQuestion(questionNumber) {
-        const questionDiv = document.getElementById(`question${questionNumber}`);
-        questionDiv.parentNode.removeChild(questionDiv);   
-    }
-</script>
+                        return `
+              <div class="form-group">
+                <textarea name="text_${questionNumber}" placeholder="Nhập câu hỏi">${questionContent}</textarea><br>
+              </div>
+              <div class="form-group">
+                <input type="radio" name="correctOption_${questionNumber}" value="a" ${row.correctOption === 'a' ? 'checked' : ''}>
+                <label>a. <input type="text" value="${row['options0'] || 'A1'}" name="options0_${questionNumber}"></label>
+              </div>
+              <div class="form-group">
+                <input type="radio" name="correctOption_${questionNumber}" value="b" ${row.correctOption === 'b' ? 'checked' : ''}>
+                <label>b. <input type="text" value="${row['options1'] || 'A2'}" name="options1_${questionNumber}"></label>
+              </div>
+              <div class="form-group">
+                <input type="radio" name="correctOption_${questionNumber}" value="c" ${row.correctOption === 'c' ? 'checked' : ''}>
+                <label>c. <input type="text" value="${row['options2'] || 'A3'}" name="options2_${questionNumber}"></label>
+              </div>
+              <div class="form-group">
+                <input type="radio" name="correctOption_${questionNumber}" value="d" ${row.correctOption === 'd' ? 'checked' : ''}>
+                <label>d. <input type="text" value="${row['options3'] || 'A4'}" name="options3_${questionNumber}"></label>
+              </div>
+            `;
+                    }).join('');
+
+                    // Hiển thị HTML
+                    document.getElementById('output').innerHTML = htmlOutput;
+                };
+
+                reader.readAsArrayBuffer(file);
+            }
+        }
+    </script>
+
+    <input type="file" id="fileInput" onchange="handleFile(event)">
+</body>
+
+</html>

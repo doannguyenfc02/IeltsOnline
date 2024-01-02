@@ -1,3 +1,4 @@
+//index.js
 const path = require('path');
 const express = require('express');
 const morgan = require("morgan");
@@ -7,6 +8,14 @@ const { engine } = require('express-handlebars');
 const route = require('./routes');
 const db = require('./config/db');
 const handlebarsHelpers = require('handlebars-helpers')();
+const session = require('express-session');
+
+
+
+
+const authMiddleware = require('./middleware/authMiddleware'); 
+const cookieParser = require('cookie-parser');
+
 
 //Connect DB
 db.connect();
@@ -24,6 +33,11 @@ app.use(express.urlencoded({
 //gửi từ JS lên để xử lý
 app.use(express.json());
 
+app.use(session({
+  secret: 'your-secret-key',
+  resave: true,
+  saveUninitialized: true
+}));
 
 app.use(methodOverride('_method'))
 
@@ -31,8 +45,16 @@ app.use(methodOverride('_method'))
 //Route init
 
 
-//template engine
 
+
+// Apply authMiddleware to specific routes
+// app.use(['/exam', '/exam/create', '/exam/insertfile', '/exam/:id/edit'], authMiddleware);
+app.use(cookieParser());
+
+
+
+
+//template engine
 //hbs:handlebars
 app.engine('hbs', engine({
   extname: '.hbs',

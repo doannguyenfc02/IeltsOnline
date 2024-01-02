@@ -1,0 +1,36 @@
+<!-- resources/views/lesson/lesson.hbs -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var video = document.getElementById('lessonVideo'); // Đặt id của thẻ iframe là 'lessonVideo'
+
+        // Sự kiện được kích hoạt khi video bắt đầu phát
+        video.addEventListener('play', function () {
+            // Thêm các điểm dừng vào video
+            video.addEventListener('timeupdate', function () {
+                var currentTime = Math.floor(video.currentTime); // Lấy thời điểm hiện tại (tính theo giây)
+
+                // Kiểm tra xem video có ở các thời điểm dừng không và dừng lại nếu có
+                if (currentTime === 5 || currentTime === 10 || currentTime === 15) {
+                    video.pause();
+                }
+            });
+        });
+    });
+</script>
+
+<div class="mt-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <!-- Menu -->
+        </div>
+        <div class="col-lg-9">
+            <h2>{{lesson.name}}</h2>
+
+            <!-- Thêm id 'lessonVideo' vào thẻ iframe -->
+            <iframe id="lessonVideo" width="560" height="315" src="https://www.youtube.com/embed/{{lesson.videoID}}" frameborder="0"
+                allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+            </iframe>
+            <p>Mô tả: {{lesson.description}}</p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,53 @@
+<div class="mt-4">
+    <h3>
+        Cập nhật tài khoản {{userId}}
+    </h3>
+
+    <form method="POST" action="/management/users/{{user._id}}?_method=PUT">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" class="form-control" value="{{user.username}}" id="username" name="username" readonly>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" class="form-control" id="password" name="password" />
+            <input type="checkbox" onclick="togglePassword()"> Show Password
+        </div>
+
+        <div class="form-group">
+            <label for="fullname">Họ và tên:</label>
+            <input type="text" class="form-control" value="{{user.fullname}}" id="fullname" name="fullname">
+
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="text" class="form-control" value="{{user.email}}" id="email" name="email">
+
+        </div>
+
+        <div class="form-group">
+            <label for="role">Loại tài khoản:</label>
+            <select class="form-control" id="role" value="{{user.role}}" name="role">
+                <option value="user" selected>User</option>
+                <option value="teacher">Teacher</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Admin</option>
+                <!-- Thêm lựa chọn tùy chọn nếu cần -->
+                <!-- <option value="other">Other</option> -->
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Lưu</button>
+    </form>
+</div>
+
+<script>
+    function togglePassword() {
+        var passwordField = document.getElementById("password");
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+        } else {
+            passwordField.type = "password";
+        }
+    }
+</script>

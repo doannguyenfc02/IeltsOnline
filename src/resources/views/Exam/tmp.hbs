@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Excel to HTML Form</title>
+  <!-- Thêm thư viện SheetJS -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+</head>
+<body>
+
+  <input type="file" id="fileInput" onchange="handleFile(event)">
+  <div id="output"></div>
+
+  <script>
+    function handleFile(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+
+          // Lấy dữ liệu từ sheet đầu tiên (giả sử)
+          const sheetData = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+
+          // Tạo HTML từ dữ liệu
+          const htmlOutput = sheetData.map((row, index) => {
+            const questionNumber = index + 1;
+            const questionContent = row['Nội dung'];
+            
+            return `
+            <form method="POST" action="/exam/store">
+              <div class="form-group">
+                <p>Câu ${questionNumber}. ${questionContent}</p>
+              </div>
+              <div class="form-group">
+                <label>a. <input type="text" value="${row['options0'] || 'A1'}" name="options0_${questionNumber}"></label>
+              </div>
+              <div class="form-group">
+                <label>b. <input type="text" value="${row['options1'] || 'A2'}" name="options1_${questionNumber}"></label>
+              </div>
+              <div class="form-group">
+                <label>c. <input type="text" value="${row['options2'] || 'A3'}" name="options2_${questionNumber}"></label>
+              </div>
+              <div class="form-group">
+                <label>d. <input type="text" value="${row['options3'] || 'A4'}" name="options3_${questionNumber}"></label>
+              </div>
+              <button type="submit" class="btn btn-primary">Lưu</button>
+            </form>
+            `;
+          }).join('');
+
+          // Hiển thị HTML
+          document.getElementById('output').innerHTML = htmlOutput;
+        };
+
+        reader.readAsArrayBuffer(file);
+      }
+    }
+  </script>
+
+</body>
+</html>
